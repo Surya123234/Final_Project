@@ -23,7 +23,7 @@ def is_laminar(r):
 def turbulent_f(r):
     bracket_1 = EPSILON / (3.7 * D)
     bracket_2 = 5.74 / r**0.9
-    return 0.25 / (log(bracket_1 + bracket_2)) ** 2
+    return 0.25 / (log(bracket_1 + bracket_2, 10)) ** 2
 
 
 def laminar_f(r):
@@ -58,15 +58,16 @@ def main():
 
     while h > 0:
         i = 0
-        while abs(new_v2 - v2) <= TOLERANCE and i < 1000:
-            v2 = new_v2
+        while i < 1000:
             r = reynolds(v2)
-            new_v2 = get_V2(h+ 0.02 + (L / 150), alpha(r), f(r))
+            new_v2 = get_V2(h+ 0.02 + (L[0] / 150), alpha(r), f(r))
+            if abs(new_v2 - v2) <= TOLERANCE: break 
+            v2 = new_v2
             i += 1
 
         v1 = get_V1(v2)
-        h = h_i - t * v1
         t += 0.1
+        h = h_i - t * v1
 
     print("Final time", t)
 
