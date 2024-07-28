@@ -39,10 +39,12 @@ def alpha(r):
     return 2 if is_laminar(r) else 1
 
 
-def get_V2(z1, a, f):
-    denom_3 = a * A_TUBE**2 / A_BOX**2
-    denom_2 = f * L[0] / D
-    return (2 * G * z1 / (a + denom_2 - denom_3)) ** 0.5
+def get_V2(z1, a, f, l):
+    z1 += 0.02 + l / 150
+    denom_1 = a * A_TUBE**2 / A_BOX**2
+    denom_2 = f * l / D
+    denom = a + denom_1 + denom_2
+    return (2 * G * z1 / denom) ** 0.5
 
 
 def get_V1(v2):
@@ -51,29 +53,24 @@ def get_V1(v2):
 
 def main():
     for l in L:
-        h = l
-        h_i = h
+        h = 0.08
         t = 0
-        # Variables
         v2 = 0.6755
-        r = reynolds(v2)
-        new_v2 = 0
 
         while h > 0:
-            i = 0
-            while i < 1000:
+            while True:
                 r = reynolds(v2)
-                new_v2 = get_V2(h, alpha(r), f(r))
+                new_v2 = get_V2(h, alpha(r), f(r), l)
                 if abs(new_v2 - v2) <= TOLERANCE:
                     break
                 v2 = new_v2
-                i += 1
 
-            v1 = get_V1(v2)
+            v1 = get_V1(new_v2)
             t += 0.1
-            h = h_i - t * v1
+            h -= 0.1 * v1
 
         print(f"Final time for length {l} metres: {int(t)} seconds")
+
 
 if __name__ == "__main__":
     main()
