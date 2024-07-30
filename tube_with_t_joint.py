@@ -5,13 +5,14 @@ from math import pi, log
 DENS = 998
 MU = 0.001
 A_BOX = 0.32 * 0.26
-D = 0.00794
+D = 0.01125
 A_TUBE = pi * D**2 / 4
 EPSILON = 0.0000015
 G = 9.81
 L = (0.2, 0.3, 0.4, 0.6)
 TOLERANCE = 0.00001
-K = 0.5
+K = 0.5 + 1.3
+
 
 def reynolds(v):
     return DENS * v * D / MU
